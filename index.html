@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Folder Tree</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090b12;
+      --row: #10131d;
+      --line: #29303d;
+      --text: #d8dce5;
+      --muted: #8b93a4;
+      --folder: #b8c5d9;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 24px auto;
+      padding: 0 14px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .tree { border-top: 1px solid var(--line); }
+
+    summary, .empty {
+      min-height: 29px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 10px;
+      border-bottom: 1px solid var(--line);
+      background: var(--row);
+    }
+
+    summary {
+      cursor: pointer;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker { display: none; }
+    summary:hover { background: #171c28; }
+
+    .arrow {
+      width: 11px;
+      color: var(--muted);
+      transition: transform .15s ease;
+    }
+
+    details[open] > summary .arrow { transform: rotate(90deg); }
+    .icon { color: var(--folder); }
+    .name { flex: 1; overflow-wrap: anywhere; }
+    .path { color: var(--muted); font-size: 11px; }
+
+    .children {
+      margin-left: 18px;
+      border-left: 1px solid var(--line);
+    }
+
+    .empty {
+      color: var(--muted);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 id="title"></h1>
+    <div class="tree" id="tree"></div>
+  </main>
+
+  <script>
+    const rootPath = "bog-webports (will NOT show folder insides)";
+
+    const folders = [
+      "amanda-the-adventurer",
+      "andys-apple-farm",
+      "baldi-plus",
+      "baldi-remaster",
+      "bendy",
+      "bergentruck",
+      "bloodmoney",
+      "buckshot-roulette",
+      "class-of-09",
+      "cuphead",
+      "dead-plate",
+      "deadseat",
+      "deltatraveler",
+      "donottakethiscathome",
+      "fears-to-fathom",
+      "getting-over-it",
+      "happy-sheepies",
+      "hotline-miami",
+      "human-expenditure-program",
+      "jelly-drift",
+      "karlson",
+      "kindergarten",
+      "lacysflashgames",
+      "milkman-karlson",
+      "minesweeperplus",
+      "omori-fixed",
+      "people-playground",
+      "pizza-tower",
+      "raft",
+      "repo",
+      "schoolboy-runaway",
+      "slender",
+      "sonic.exe",
+      "speed-stars",
+      "tattletail",
+      "thats-not-my-neighbor",
+      "the-man-in-the-window",
+      "ultrakill",
+      "undertale-yellow",
+      "web-fishing",
+      "witch-heart",
+      "yandere-simulator",
+      "yume-nikki"
+    ];
+
+    document.getElementById("title").textContent = rootPath;
+
+    function makeFolder(name, parentPath) {
+      const details = document.createElement("details");
+      const summary = document.createElement("summary");
+
+      const arrow = document.createElement("span");
+      arrow.className = "arrow";
+      arrow.textContent = "▸";
+
+      const icon = document.createElement("span");
+      icon.className = "icon";
+      icon.textContent = "📁";
+
+      const label = document.createElement("span");
+      label.className = "name";
+      label.textContent = name;
+
+      const path = document.createElement("span");
+      path.className = "path";
+      path.textContent = `${parentPath}/${name}`;
+
+      summary.append(arrow, icon, label, path);
+      details.appendChild(summary);
+
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "(empty folder)";
+      details.appendChild(empty);
+
+      return details;
+    }
+
+    const tree = document.getElementById("tree");
+    const root = document.createElement("details");
+    root.open = true;
+
+    const rootSummary = document.createElement("summary");
+    rootSummary.innerHTML =
+      '<span class="arrow">▸</span><span class="icon">📁</span>' +
+      `<span class="name">${rootPath}</span>`;
+
+    const children = document.createElement("div");
+    children.className = "children";
+
+    folders.forEach(name => {
+      children.appendChild(makeFolder(name, rootPath));
+    });
+
+    root.append(rootSummary, children);
+    tree.appendChild(root);
+  </script>
+</body>
+</html>
